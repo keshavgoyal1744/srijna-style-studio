@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-fashion.jpg";
+import CustomizationStudio from "./CustomizationStudio";
 
 const FashionHero = () => {
+  const [isCustomizationOpen, setIsCustomizationOpen] = useState(false);
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
@@ -28,7 +31,7 @@ const FashionHero = () => {
           <Button variant="hero" size="lg">
             Explore Collections
           </Button>
-          <Button variant="gold" size="lg">
+          <Button variant="gold" size="lg" onClick={() => setIsCustomizationOpen(true)}>
             Start Customization
           </Button>
         </div>
@@ -44,6 +47,11 @@ const FashionHero = () => {
           </div>
         </div>
       </div>
+      
+      <CustomizationStudio 
+        isOpen={isCustomizationOpen} 
+        onClose={() => setIsCustomizationOpen(false)} 
+      />
     </section>
   );
 };

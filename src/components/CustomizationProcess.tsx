@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import CustomizationStudio from "./CustomizationStudio";
 
 const CustomizationProcess = () => {
+  const [isCustomizationOpen, setIsCustomizationOpen] = useState(false);
   const steps = [
     {
       step: "01",
@@ -68,7 +71,7 @@ const CustomizationProcess = () => {
             Join thousands of satisfied customers worldwide who trust us with their special occasions
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="gold" size="lg">
+            <Button variant="gold" size="lg" onClick={() => setIsCustomizationOpen(true)}>
               Start Customization
             </Button>
             <Button variant="outline" size="lg" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-luxury-deep">
@@ -77,6 +80,11 @@ const CustomizationProcess = () => {
           </div>
         </div>
       </div>
+      
+      <CustomizationStudio 
+        isOpen={isCustomizationOpen} 
+        onClose={() => setIsCustomizationOpen(false)} 
+      />
     </section>
   );
 };
