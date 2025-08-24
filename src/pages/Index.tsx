@@ -1,13 +1,20 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import FashionHero from "@/components/FashionHero";
+import CollectionsShowcase from "@/components/CollectionsShowcase";
+import CustomizationProcess from "@/components/CustomizationProcess";
+import AboutBrand from "@/components/AboutBrand";
+import GlobalReach from "@/components/GlobalReach";
+import ContactSection from "@/components/ContactSection";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <main className="min-h-screen">
+      <FashionHero />
+      <CollectionsShowcase />
+      <CustomizationProcess />
+      <AboutBrand />
+      <GlobalReach />
+      <ContactSection />
+    </main>
   );
 };
 

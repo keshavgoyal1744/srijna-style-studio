@@ -8,35 +8,57 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 350 20% 99%;
+    --foreground: 350 15% 8%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 350 20% 99%;
+    --card-foreground: 350 15% 8%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 350 20% 99%;
+    --popover-foreground: 350 15% 8%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 350 85% 15%;
+    --primary-foreground: 350 20% 99%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 350 40% 96%;
+    --secondary-foreground: 350 85% 15%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 350 25% 94%;
+    --muted-foreground: 350 15% 40%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 45 95% 68%;
+    --accent-foreground: 350 85% 15%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 350 20% 99%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 350 20% 90%;
+    --input: 350 20% 90%;
+    --ring: 350 85% 15%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Fashion Brand Colors */
+    --luxury-deep: 350 85% 15%;
+    --luxury-gold: 45 95% 68%;
+    --luxury-rose: 350 75% 85%;
+    --luxury-cream: 45 40% 96%;
+    --luxury-charcoal: 350 15% 20%;
+
+    /* Gradients */
+    --gradient-luxury: linear-gradient(135deg, hsl(var(--luxury-deep)), hsl(var(--luxury-charcoal)));
+    --gradient-gold: linear-gradient(135deg, hsl(var(--luxury-gold)), hsl(45 85% 75%));
+    --gradient-rose: linear-gradient(135deg, hsl(var(--luxury-rose)), hsl(350 65% 90%));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--luxury-deep)) 0%, hsl(var(--luxury-charcoal)) 50%, hsl(var(--luxury-deep)) 100%);
+
+    /* Shadows */
+    --shadow-luxury: 0 20px 40px -10px hsl(var(--luxury-deep) / 0.3);
+    --shadow-gold: 0 10px 30px -5px hsl(var(--luxury-gold) / 0.4);
+    --shadow-elegant: 0 8px 32px -8px hsl(var(--luxury-charcoal) / 0.2);
+
+    /* Animations */
+    --transition-luxury: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
 
