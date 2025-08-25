@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Canvas as FabricCanvas, FabricImage, Rect, Circle, Path } from "fabric";
+import { Canvas as FabricCanvas, Rect, Circle, Path } from "fabric";
 
 interface CanvasLayer {
   id: string;
@@ -77,43 +77,42 @@ export const EnhancedCanvas = ({
     renderLayers();
   }, [fabricCanvas, garmentType, modelSize, fabric, colors, patterns, styles]);
 
-  const renderLayers = async () => {
+  const renderLayers = () => {
     if (!fabricCanvas) return;
 
     fabricCanvas.clear();
     
     // Layer 1: Background
-    await renderBackground();
+    renderBackground();
     
     // Layer 2: Model Avatar
-    await renderModel();
+    renderModel();
     
     // Layer 3: Garment Base
-    await renderGarmentBase();
+    renderGarmentBase();
     
     // Layer 4: Fabric Texture
-    await renderFabricTexture();
+    renderFabricTexture();
     
     // Layer 5: Color Overlay
-    await renderColorOverlay();
+    renderColorOverlay();
     
     // Layer 6: Patterns
-    await renderPatterns();
+    renderPatterns();
     
     // Layer 7: Embellishments
-    await renderEmbellishments();
+    renderEmbellishments();
     
     // Layer 8: Borders
-    await renderBorders();
+    renderBorders();
     
     // Layer 9: Style Elements
-    await renderStyleElements();
+    renderStyleElements();
 
     fabricCanvas.renderAll();
   };
 
-  const renderBackground = async () => {
-    const gradient = `linear-gradient(135deg, ${colors.primary}15, ${colors.secondary}15)`;
+  const renderBackground = () => {
     const bgRect = new Rect({
       left: 0,
       top: 0,
@@ -125,7 +124,7 @@ export const EnhancedCanvas = ({
     fabricCanvas?.add(bgRect);
   };
 
-  const renderModel = async () => {
+  const renderModel = () => {
     // Model silhouette based on size
     const sizeMultipliers = {
       'xs': 0.85, 's': 0.9, 'm': 1.0, 'l': 1.1, 'xl': 1.2, 'xxl': 1.3, 'xxxl': 1.4
@@ -148,7 +147,9 @@ export const EnhancedCanvas = ({
     fabricCanvas?.add(modelShape);
   };
 
-  const renderGarmentBase = async () => {
+  const renderGarmentBase = () => {
+    if (!garmentType) return;
+    
     const garmentShapes = {
       saree: () => createSareeShape(),
       lehenga: () => createLehengaShape(),
@@ -248,7 +249,7 @@ export const EnhancedCanvas = ({
     });
   };
 
-  const renderFabricTexture = async () => {
+  const renderFabricTexture = () => {
     // Simulate fabric texture with subtle patterns
     if (fabric) {
       const texturePattern = new Rect({
@@ -264,7 +265,7 @@ export const EnhancedCanvas = ({
     }
   };
 
-  const renderColorOverlay = async () => {
+  const renderColorOverlay = () => {
     // Primary color overlay
     const primaryOverlay = new Rect({
       left: 150,
@@ -292,7 +293,7 @@ export const EnhancedCanvas = ({
     }
   };
 
-  const renderPatterns = async () => {
+  const renderPatterns = () => {
     patterns.patterns.forEach((pattern, index) => {
       const patternShape = new Circle({
         left: 170 + (index * 15),
@@ -306,7 +307,7 @@ export const EnhancedCanvas = ({
     });
   };
 
-  const renderEmbellishments = async () => {
+  const renderEmbellishments = () => {
     patterns.handwork.forEach((work, index) => {
       const embellishment = new Circle({
         left: 180 + (index * 10),
@@ -320,7 +321,7 @@ export const EnhancedCanvas = ({
     });
   };
 
-  const renderBorders = async () => {
+  const renderBorders = () => {
     if (patterns.borders.length > 0) {
       const border = new Rect({
         left: 148,
@@ -338,7 +339,7 @@ export const EnhancedCanvas = ({
     }
   };
 
-  const renderStyleElements = async () => {
+  const renderStyleElements = () => {
     // Neckline variations
     if (styles.neckline === 'V-Neck') {
       const vneck = new Path('M 190 130 L 200 145 L 210 130', {
