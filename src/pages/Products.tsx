@@ -4,7 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Filter, ArrowLeft, ShoppingCart, Heart } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Search, Filter, ArrowLeft, ShoppingCart, Heart, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 // Sample product data - replace with your actual products
@@ -93,12 +95,24 @@ const categories = [
   { value: "kurti", label: "Kurtis" }
 ];
 
+const fabrics = ["Silk", "Cotton", "Chiffon", "Georgette", "Crepe", "Net", "Velvet", "Satin"];
+const occasions = ["Wedding", "Party", "Casual", "Festival", "Formal", "Traditional"];
+const colors = ["Red", "Blue", "Green", "Pink", "Purple", "Gold", "Silver", "Black", "White", "Orange"];
+
 const Products = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("featured");
   const [favorites, setFavorites] = useState<number[]>([]);
+  const [showFilters, setShowFilters] = useState(false);
+  
+  // Advanced filters
+  const [priceRange, setPriceRange] = useState([0, 60000]);
+  const [selectedFabrics, setSelectedFabrics] = useState<string[]>([]);
+  const [selectedOccasions, setSelectedOccasions] = useState<string[]>([]);
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [inStockOnly, setInStockOnly] = useState(false);
 
   const filteredProducts = sampleProducts.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -106,8 +120,19 @@ const Products = () => {
                          product.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
     
     const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
+    const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
+    const matchesStock = !inStockOnly || product.inStock;
     
-    return matchesSearch && matchesCategory;
+    // Check fabric filter (simplified - you can enhance this based on your product data structure)
+    const matchesFabric = selectedFabrics.length === 0 || 
+                         selectedFabrics.some(fabric => 
+                           product.tags.some(tag => tag.toLowerCase().includes(fabric.toLowerCase())));
+    
+    const matchesOccasion = selectedOccasions.length === 0 ||
+                           selectedOccasions.some(occasion =>
+                             product.tags.some(tag => tag.toLowerCase().includes(occasion.toLowerCase())));
+    
+    return matchesSearch && matchesCategory && matchesPrice && matchesStock && matchesFabric && matchesOccasion;
   }).sort((a, b) => {
     switch (sortBy) {
       case "price-low":
@@ -127,6 +152,24 @@ const Products = () => {
         ? prev.filter(id => id !== productId)
         : [...prev, productId]
     );
+  };
+
+  const toggleArrayFilter = (value: string, setter: React.Dispatch<React.SetStateAction<string[]>>) => {
+    setter(prev => 
+      prev.includes(value) 
+        ? prev.filter(item => item !== value)
+        : [...prev, value]
+    );
+  };
+
+  const clearAllFilters = () => {
+    setSearchQuery("");
+    setSelectedCategory("all");
+    setPriceRange([0, 60000]);
+    setSelectedFabrics([]);
+    setSelectedOccasions([]);
+    setSelectedColors([]);
+    setInStockOnly(false);
   };
 
   return (
@@ -191,15 +234,147 @@ const Products = () => {
 
       {/* Products Grid */}
       <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="flex justify-between items-center mb-8">
-          <p className="text-luxury-charcoal">
-            Showing {filteredProducts.length} of {sampleProducts.length} products
-          </p>
-          <Button variant="outline" className="gap-2">
-            <Filter className="h-4 w-4" />
-            More Filters
-          </Button>
-        </div>
+          <div className="flex justify-between items-center mb-8">
+            <p className="text-luxury-charcoal">
+              Showing {filteredProducts.length} of {sampleProducts.length} products
+            </p>
+            <Button 
+              variant="outline" 
+              className="gap-2"
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              <Filter className="h-4 w-4" />
+              {showFilters ? 'Hide Filters' : 'More Filters'}
+            </Button>
+          </div>
+
+          {/* Advanced Filters Panel */}
+          {showFilters && (
+            <Card className="mb-8 p-6 bg-luxury-cream/50">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-lg font-semibold text-luxury-deep">Advanced Filters</h3>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" onClick={clearAllFilters}>
+                    Clear All
+                  </Button>
+                  <Button variant="ghost" size="icon" onClick={() => setShowFilters(false)}>
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Price Range */}
+                <div>
+                  <label className="text-sm font-medium text-luxury-deep mb-3 block">
+                    Price Range: ₹{priceRange[0].toLocaleString()} - ₹{priceRange[1].toLocaleString()}
+                  </label>
+                  <Slider
+                    min={0}
+                    max={60000}
+                    step={1000}
+                    value={priceRange}
+                    onValueChange={setPriceRange}
+                    className="w-full"
+                  />
+                </div>
+
+                {/* Fabric Filter */}
+                <div>
+                  <label className="text-sm font-medium text-luxury-deep mb-3 block">Fabric</label>
+                  <div className="space-y-2 max-h-32 overflow-y-auto">
+                    {fabrics.map(fabric => (
+                      <div key={fabric} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={`fabric-${fabric}`}
+                          checked={selectedFabrics.includes(fabric)}
+                          onCheckedChange={() => toggleArrayFilter(fabric, setSelectedFabrics)}
+                        />
+                        <label htmlFor={`fabric-${fabric}`} className="text-sm text-luxury-charcoal cursor-pointer">
+                          {fabric}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Occasion Filter */}
+                <div>
+                  <label className="text-sm font-medium text-luxury-deep mb-3 block">Occasion</label>
+                  <div className="space-y-2 max-h-32 overflow-y-auto">
+                    {occasions.map(occasion => (
+                      <div key={occasion} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={`occasion-${occasion}`}
+                          checked={selectedOccasions.includes(occasion)}
+                          onCheckedChange={() => toggleArrayFilter(occasion, setSelectedOccasions)}
+                        />
+                        <label htmlFor={`occasion-${occasion}`} className="text-sm text-luxury-charcoal cursor-pointer">
+                          {occasion}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Additional Filters */}
+                <div>
+                  <label className="text-sm font-medium text-luxury-deep mb-3 block">Availability</label>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="in-stock"
+                      checked={inStockOnly}
+                      onCheckedChange={(checked) => setInStockOnly(checked as boolean)}
+                    />
+                    <label htmlFor="in-stock" className="text-sm text-luxury-charcoal cursor-pointer">
+                      In Stock Only
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Applied Filters Summary */}
+              {(selectedFabrics.length > 0 || selectedOccasions.length > 0 || inStockOnly || priceRange[0] > 0 || priceRange[1] < 60000) && (
+                <div className="mt-6 pt-4 border-t border-luxury-rose/20">
+                  <p className="text-sm font-medium text-luxury-deep mb-2">Applied Filters:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {priceRange[0] > 0 || priceRange[1] < 60000 ? (
+                      <Badge variant="secondary" className="gap-1">
+                        ₹{priceRange[0].toLocaleString()} - ₹{priceRange[1].toLocaleString()}
+                        <button onClick={() => setPriceRange([0, 60000])}>
+                          <X className="h-3 w-3" />
+                        </button>
+                      </Badge>
+                    ) : null}
+                    {selectedFabrics.map(fabric => (
+                      <Badge key={fabric} variant="secondary" className="gap-1">
+                        {fabric}
+                        <button onClick={() => toggleArrayFilter(fabric, setSelectedFabrics)}>
+                          <X className="h-3 w-3" />
+                        </button>
+                      </Badge>
+                    ))}
+                    {selectedOccasions.map(occasion => (
+                      <Badge key={occasion} variant="secondary" className="gap-1">
+                        {occasion}
+                        <button onClick={() => toggleArrayFilter(occasion, setSelectedOccasions)}>
+                          <X className="h-3 w-3" />
+                        </button>
+                      </Badge>
+                    ))}
+                    {inStockOnly && (
+                      <Badge variant="secondary" className="gap-1">
+                        In Stock
+                        <button onClick={() => setInStockOnly(false)}>
+                          <X className="h-3 w-3" />
+                        </button>
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              )}
+            </Card>
+          )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProducts.map(product => (
@@ -291,11 +466,8 @@ const Products = () => {
           <div className="text-center py-20">
             <p className="text-xl text-luxury-charcoal mb-4">No products found</p>
             <p className="text-luxury-charcoal mb-6">Try adjusting your search or filters</p>
-            <Button onClick={() => {
-              setSearchQuery("");
-              setSelectedCategory("all");
-            }}>
-              Clear Filters
+            <Button onClick={clearAllFilters}>
+              Clear All Filters
             </Button>
           </div>
         )}
