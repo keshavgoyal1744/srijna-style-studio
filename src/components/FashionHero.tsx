@@ -1,10 +1,9 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-fashion.jpg";
-import CustomizationStudio from "./CustomizationStudio";
+import { useNavigate } from "react-router-dom";
 
 const FashionHero = () => {
-  const [isCustomizationOpen, setIsCustomizationOpen] = useState(false);
+  const navigate = useNavigate();
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
@@ -28,11 +27,11 @@ const FashionHero = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
-          <Button variant="hero" size="lg">
+          <Button variant="hero" size="lg" onClick={() => navigate('/products')}>
             Explore Collections
           </Button>
-          <Button variant="gold" size="lg" onClick={() => setIsCustomizationOpen(true)}>
-            Start Customization
+          <Button variant="gold" size="lg">
+            Visit Store for Customization
           </Button>
         </div>
         
@@ -47,11 +46,6 @@ const FashionHero = () => {
           </div>
         </div>
       </div>
-      
-      <CustomizationStudio 
-        isOpen={isCustomizationOpen} 
-        onClose={() => setIsCustomizationOpen(false)} 
-      />
     </section>
   );
 };
