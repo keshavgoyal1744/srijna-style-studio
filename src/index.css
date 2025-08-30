@@ -17,33 +17,33 @@ All colors MUST be HSL.
     --popover: 350 20% 99%;
     --popover-foreground: 350 15% 8%;
 
-    --primary: 350 85% 15%;
-    --primary-foreground: 350 20% 99%;
+    --primary: 0 65% 25%;        /* Deep maroon */
+    --primary-foreground: 38 25% 96%;
 
-    --secondary: 350 40% 96%;
-    --secondary-foreground: 350 85% 15%;
+    --secondary: 0 20% 92%;      /* Light maroon tint */
+    --secondary-foreground: 0 65% 25%;
 
-    --muted: 350 25% 94%;
-    --muted-foreground: 350 15% 40%;
+    --muted: 0 15% 94%;
+    --muted-foreground: 0 25% 40%;
 
-    --accent: 45 95% 68%;
-    --accent-foreground: 350 85% 15%;
+    --accent: 38 85% 65%;        /* Warm gold */
+    --accent-foreground: 0 65% 25%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 350 20% 99%;
 
-    --border: 350 20% 90%;
-    --input: 350 20% 90%;
-    --ring: 350 85% 15%;
+    --border: 0 15% 90%;
+    --input: 0 15% 90%;
+    --ring: 0 65% 25%;
 
     --radius: 0.75rem;
 
-    /* Fashion Brand Colors */
-    --luxury-deep: 350 85% 15%;
-    --luxury-gold: 45 95% 68%;
-    --luxury-rose: 350 75% 85%;
-    --luxury-cream: 45 40% 96%;
-    --luxury-charcoal: 350 15% 20%;
+    /* Fashion Brand Colors - Maroon Based */
+    --luxury-deep: 0 65% 25%;        /* Deep maroon */
+    --luxury-gold: 38 85% 65%;       /* Warm gold complement */
+    --luxury-rose: 0 35% 85%;        /* Soft rose complement */
+    --luxury-cream: 38 25% 96%;      /* Warm cream */
+    --luxury-charcoal: 0 15% 20%;    /* Rich charcoal with maroon undertone */
 
     /* Gradients */
     --gradient-luxury: linear-gradient(135deg, hsl(var(--luxury-deep)), hsl(var(--luxury-charcoal)));

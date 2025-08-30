@@ -4,6 +4,7 @@ import CustomerReviews from "@/components/CustomerReviews";
 import AboutBrand from "@/components/AboutBrand";
 import GlobalReach from "@/components/GlobalReach";
 import ContactSection from "@/components/ContactSection";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -14,6 +15,7 @@ const Index = () => {
       <AboutBrand />
       <GlobalReach />
       <ContactSection />
+      <Footer />
     </main>
   );
 };

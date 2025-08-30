@@ -30,7 +30,11 @@ const FashionHero = () => {
           <Button variant="hero" size="lg" onClick={() => navigate('/products')}>
             Explore Collections
           </Button>
-          <Button variant="gold" size="lg">
+          <Button 
+            variant="gold" 
+            size="lg"
+            onClick={() => window.open('https://maps.google.com', '_blank')}
+          >
             Visit Store for Customization
           </Button>
         </div>

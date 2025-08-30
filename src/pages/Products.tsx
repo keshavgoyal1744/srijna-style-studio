@@ -8,6 +8,7 @@ import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Search, Filter, ArrowLeft, ShoppingCart, Heart, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Footer from "@/components/Footer";
 
 // Sample product data - replace with your actual products
 const sampleProducts = [
@@ -492,6 +493,7 @@ const Products = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
