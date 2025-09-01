@@ -8,6 +8,8 @@ import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Search, Filter, ArrowLeft, ShoppingCart, Heart, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "@/hooks/useCart";
+import { useFavorites } from "@/hooks/useFavorites";
 import Footer from "@/components/Footer";
 
 // Sample product data - replace with your actual products
@@ -102,10 +104,11 @@ const colors = ["Red", "Blue", "Green", "Pink", "Purple", "Gold", "Silver", "Bla
 
 const Products = () => {
   const navigate = useNavigate();
+  const { addToCart, getTotalItems } = useCart();
+  const { toggleFavorite, isFavorite } = useFavorites();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("featured");
-  const [favorites, setFavorites] = useState<number[]>([]);
   const [showFilters, setShowFilters] = useState(false);
   
   // Advanced filters
@@ -147,12 +150,18 @@ const Products = () => {
     }
   });
 
-  const toggleFavorite = (productId: number) => {
-    setFavorites(prev => 
-      prev.includes(productId) 
-        ? prev.filter(id => id !== productId)
-        : [...prev, productId]
-    );
+  const handleToggleFavorite = (product: any) => {
+    const favoriteItem = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      originalPrice: product.originalPrice,
+      image: product.image,
+      description: product.description,
+      rating: product.rating,
+      inStock: product.inStock
+    };
+    toggleFavorite(favoriteItem);
   };
 
   const toggleArrayFilter = (value: string, setter: React.Dispatch<React.SetStateAction<string[]>>) => {
@@ -187,9 +196,32 @@ const Products = () => {
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <div>
+            <div className="flex-1">
               <h1 className="text-4xl font-bold">Our Collection</h1>
               <p className="text-lg opacity-90">Discover handcrafted elegance</p>
+            </div>
+            <div className="flex gap-2">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => navigate('/favorites')}
+                className="text-primary-foreground hover:bg-primary-foreground/20 relative"
+              >
+                <Heart className="h-5 w-5" />
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => navigate('/cart')}
+                className="text-primary-foreground hover:bg-primary-foreground/20 relative"
+              >
+                <ShoppingCart className="h-5 w-5" />
+                {getTotalItems() > 0 && (
+                  <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-luxury-gold text-luxury-deep">
+                    {getTotalItems()}
+                  </Badge>
+                )}
+              </Button>
             </div>
           </div>
 
@@ -395,10 +427,10 @@ const Products = () => {
                   variant="ghost"
                   size="icon"
                   className="absolute top-4 right-4 bg-background/80 hover:bg-background"
-                  onClick={() => toggleFavorite(product.id)}
+                  onClick={() => handleToggleFavorite(product)}
                 >
                   <Heart 
-                    className={`h-4 w-4 ${favorites.includes(product.id) ? 'fill-red-500 text-red-500' : ''}`} 
+                    className={`h-4 w-4 ${isFavorite(product.id) ? 'fill-red-500 text-red-500' : ''}`} 
                   />
                 </Button>
                 {product.originalPrice > product.price && (
@@ -454,6 +486,7 @@ const Products = () => {
                   className="w-full" 
                   disabled={!product.inStock}
                   variant={product.inStock ? "default" : "secondary"}
+                  onClick={() => product.inStock && addToCart(product)}
                 >
                   <ShoppingCart className="mr-2 h-4 w-4" />
                   {product.inStock ? "Add to Cart" : "Notify When Available"}
